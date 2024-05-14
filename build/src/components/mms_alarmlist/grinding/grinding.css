@@ -1,0 +1,53 @@
+
+/* css box */
+#box_y {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  border-radius: 15px;
+}
+
+#gradient {
+    /* height: 100px; */
+    /* background-color: red; */
+    background-image:
+      linear-gradient(
+        to right, 
+        #FF5D5D, #4EE550
+      );
+  }
+
+
+  /* @import "compass/css3"; */
+ #clock {
+  position: absolute;
+  height: 5px;
+  width: 5px;
+  /* margin: 24px 0 0 -130px; */
+  animation: updown 2s ease infinite;
+}
+
+@keyframes updown {
+0% {
+  transform: translateY(-100%);
+}
+
+50% {
+  transform: translateY(100%);
+}
+
+100% {
+  transform: translateY(-100%);
+}
+}
+
+/* css text กระพริบ */
+/* Define the animation */
+@keyframes flashingAnimation {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Apply the animation to the flashing-text class */
+#flashing-text {
+  animation: flashingAnimation 1s infinite; /* Adjust the duration as needed */
+}
