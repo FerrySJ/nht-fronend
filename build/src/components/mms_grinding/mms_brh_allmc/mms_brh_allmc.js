@@ -4,6 +4,7 @@ import { httpClient } from "../../../utils/HttpClient";
 import { server } from "../../../constance/contance";
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
+import "./mms_brh_allmc.css"
 
 class Mms_brh_allmc extends Component {
   constructor(props) {
@@ -28,16 +29,14 @@ class Mms_brh_allmc extends Component {
       tng_B: "",
       prod_total_B: "",
       yr_B: "",
+      utl_B: "",
       // R
       data_status_R: [],
       name_label_R: [],
-      avg_ct_R: "",
       ect_R: "",
       idle_time_R: "",
-      ng_total_R: "",
-      tng_R: "",
       prod_total_R: "",
-      yr_R: "",
+      utl_R: "",
       // H
       data_status_H: [],
       name_label_H: [],
@@ -46,9 +45,7 @@ class Mms_brh_allmc extends Component {
       ect2_H: "",
       idle_time1_H: "",
       idle_time2_H: "",
-      tng_H: "",
       prod_total_H: "",
-      yr_H: "",
       // prod
       data_prod_H: [],
       series_prod_H: [],
@@ -80,10 +77,17 @@ class Mms_brh_allmc extends Component {
     try {
       if (this.state.list_machine !== null) {
         const myResult = this.state.list_machine;
-        return myResult.map((item) => <option>{item.mc_no}</option>);
+        return myResult.map((item) => (
+          <option key={item.id}>{item.mc_no}</option>
+        ));
       }
-    } catch (error) {}
+    } catch (error) {
+      // Handle any potential errors here
+      console.error("Error rendering options:", error);
+      return null; // or return a default option or message
+    }
   };
+
   get_prod_gd_B_R = async () => {
     // console.log("get_prod_gd");
     let data_B = await httpClient.post(
@@ -107,7 +111,7 @@ class Mms_brh_allmc extends Component {
         this.state.start_date
     );
     await this.setState({
-      last_prod_R: data_B.data.result_PD.pop(),
+      last_prod_R: data_R.data.result_PD.pop(),
     });
 
     setTimeout(
@@ -129,26 +133,42 @@ class Mms_brh_allmc extends Component {
         "/" +
         this.state.start_date
     );
-    // console.log(data.data.result_prod_sh);
-
-    // สร้าง promise สำหรับแต่ละ shift
-    const promises = data.data.result_prod_sh.map(async (item) => {
-      if (item.shift === "A") {
-        return { prod_shift_A_H: item.total_prod };
-      } else if (item.shift === "B") {
-        return { prod_shift_B_H: item.total_prod };
-      } else if (item.shift === "C") {
-        return { prod_shift_C_H: item.total_prod };
+    let data_A = data.data.result_prod_sh;
+    // console.log("prod_shift_A_H",data_A);
+    for (let index = 0; index < data_A.length; index++) {
+      if (data_A[index].shift === "A") {
+        console.log("A", data_A[index].total_prod);
+        this.setState({ prod_shift_A_H: data_A[index].total_prod });
+      } else if (data_A[index].shift === "B") {
+        console.log("B", data_A[index].total_prod);
+        this.setState({ prod_shift_B_H: data_A[index].total_prod });
+      } else if (data_A[index].shift === "C") {
+        console.log("C", data_A[index].total_prod);
+        this.setState({ prod_shift_C_H: data_A[index].total_prod });
+      } else {
+        console.log("...");
       }
-    });
+    }
+    // สร้าง promise สำหรับแต่ละ shift
+    // const promises = data.data.result_prod_sh.map(async (item) => {
+    //   console.log("item",item);
+    //   if (item.shift === "A") {
+    //     return { prod_shift_A_H: item.total_prod };
+    //   } else if (item.shift === "B") {
+    //     return { prod_shift_B_H: item.total_prod };
+    //   } else if (item.shift === "C") {
+    //     return { prod_shift_C_H: item.total_prod };
+    //   } else {
+    //     return { prod_shift_other_H: item.total_prod };
+    //   }
+    // });
+    // // รอให้ทุก promises เสร็จสิ้น
+    // const results = await Promise.all(promises);
 
-    // รอให้ทุก promises เสร็จสิ้น
-    const results = await Promise.all(promises);
-
-    // รวมผลลัพธ์จาก promises และตั้งค่า state ทีละครั้ง
-    results.forEach(async (result) => {
-      await this.setState(result);
-    });
+    // // รวมผลลัพธ์จาก promises และตั้งค่า state ทีละครั้ง
+    // results.forEach(async (result) => {
+    //   await this.setState(result);
+    // });
     await this.setState({
       data_prod_H: data.data.resultOutput,
       last_prod_H: data.data.result_PD.pop(),
@@ -171,7 +191,7 @@ class Mms_brh_allmc extends Component {
   getOutput_ball_B = async () => {
     // console.log(this.state.selected_machine);
     const get_data = await httpClient.post(
-      server.MMS_GD_ALL_MC +
+      server.GET_MMS_GD_ALL_MC +
         "/" +
         this.state.start_date +
         "/" +
@@ -185,36 +205,39 @@ class Mms_brh_allmc extends Component {
       this.clear_state_B();
     } else {
       this.setState({
-        avg_ct_B: get_data.data.result[0].avg_cycletime,
-        ect_B: get_data.data.result[0].each_ct,
-        idle_time_B: get_data.data.result[0].idle_time,
-        ng_total_B: get_data.data.result[0].ng_n + get_data.data.result[0].ng_p,
-        tng_B: get_data.data.result[0].tng,
+        avg_ct_B: get_data.data.result[0].avgct,
+        ect_B: get_data.data.result[0].eachct,
+        idle_time_B: get_data.data.result[0].idl,
+        ng_total_B:
+          get_data.data.result[0].ng_n +
+          get_data.data.result[0].ng_p +
+          get_data.data.result[0].tng,
         prod_total_B: get_data.data.result[0].prod_total,
-        yr_B: get_data.data.result[0].yield_rate,
+        yr_B: get_data.data.result[0].yieldrt,
+        utl_B: get_data.data.result[0].utl_total,
       });
     }
-    let array = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
-      date: this.state.start_date,
-      machine: this.state.selected_machine + "B",
-    });
-    // console.log("B", array.data);
-    // console.log(mc_data.data.result);
-    // console.log(mc_data.data.result[0].topic);
+    // let array = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
+    //   date: this.state.start_date,
+    //   machine: this.state.selected_machine + "B",
+    // });
+    // // console.log("B", array.data);
+    // // console.log(mc_data.data.result);
+    // // console.log(mc_data.data.result[0].topic);
 
-    let arrayData = array.data.result;
-    const data_status = arrayData.map((item) => item.sumtime);
-    const name = arrayData.map((item) => item.topic);
-    // console.log(data_status);
-    // console.log(name);
+    // let arrayData = array.data.result;
+    // const data_status = arrayData.map((item) => item.sumtime);
+    // const name = arrayData.map((item) => item.alarm);
+    // // console.log(data_status);
+    // // console.log(name);
 
-    await this.setState({
-      data_status_B: data_status, //[run[0], stop[0], alarm[0], wait[0], full[0]],
-      name_label_B: name,
-      data_mc_B: this.state.selected_machine + "B",
-      count_mc_B: 999, //newArr_MC.length,
-      loading: "off",
-    });
+    // await this.setState({
+    //   data_status_B: data_status, //[run[0], stop[0], alarm[0], wait[0], full[0]],
+    //   name_label_B: name,
+    //   data_mc_B: this.state.selected_machine + "B",
+    //   count_mc_B: 999, //newArr_MC.length,
+    //   loading: "off",
+    // });
     // console.log("=================");
     // console.log(this.state.data_status);
 
@@ -229,7 +252,7 @@ class Mms_brh_allmc extends Component {
   getOutput_ball_R = async () => {
     // console.log(this.state.selected_machine + "R");
     const get_data = await httpClient.post(
-      server.MMS_GD_ALL_MC +
+      server.GET_MMS_GD_ALL_MC +
         "/" +
         this.state.start_date +
         "/" +
@@ -244,36 +267,33 @@ class Mms_brh_allmc extends Component {
       this.clear_state_R();
     } else {
       this.setState({
-        avg_ct_R: get_data.data.result[0].avg_cycletime,
-        ect_R: get_data.data.result[0].each_ct,
-        idle_time_R: get_data.data.result[0].idle_time,
-        ng_total_R: get_data.data.result[0].ng_n + get_data.data.result[0].ng_p,
-        tng_R: get_data.data.result[0].tng,
+        ect_R: get_data.data.result[0].eachct,
+        idle_time_R: get_data.data.result[0].idl,
         prod_total_R: get_data.data.result[0].prod_total,
-        yr_R: get_data.data.result[0].yield_rate,
+        utl_R: get_data.data.result[0].utl_total,
       });
     }
-    let array = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
-      date: this.state.start_date,
-      machine: this.state.selected_machine + "R",
-    });
-    // console.log("R", array.data);
-    // console.log(mc_data.data.result);
-    // console.log(mc_data.data.result[0].topic);
+    // let array = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
+    //   date: this.state.start_date,
+    //   machine: this.state.selected_machine + "R",
+    // });
+    // // console.log("R", array.data);
+    // // console.log(mc_data.data.result);
+    // // console.log(mc_data.data.result[0].topic);
 
-    let arrayData = array.data.result;
-    const data_status = arrayData.map((item) => item.sumtime);
-    const name = arrayData.map((item) => item.topic);
-    // console.log(data_status);
-    // console.log(name);
+    // let arrayData = array.data.result;
+    // const data_status = arrayData.map((item) => item.sumtime);
+    // const name = arrayData.map((item) => item.topic);
+    // // console.log(data_status);
+    // // console.log(name);
 
-    await this.setState({
-      data_status_R: data_status, //[run[0], stop[0], alarm[0], wait[0], full[0]],
-      name_label_R: name,
-      data_mc_R: this.state.selected_machine + "R",
-      count_mc_R: 999, //newArr_MC.length,
-      loading: "off",
-    });
+    // await this.setState({
+    //   data_status_R: data_status, //[run[0], stop[0], alarm[0], wait[0], full[0]],
+    //   name_label_R: name,
+    //   data_mc_R: this.state.selected_machine + "R",
+    //   count_mc_R: 999, //newArr_MC.length,
+    //   loading: "off",
+    // });
     // console.log("=================");
     // console.log(this.state.data_status);
 
@@ -289,7 +309,7 @@ class Mms_brh_allmc extends Component {
   getOutput_ball_H = async () => {
     // console.log(this.state.selected_machine + "H");
     const get_data = await httpClient.post(
-      server.MMS_GD_ALL_MC +
+      server.GET_MMS_GD_ALL_MC +
         "/" +
         this.state.start_date +
         "/" +
@@ -304,39 +324,37 @@ class Mms_brh_allmc extends Component {
       this.clear_state_H();
     } else {
       this.setState({
-        avg_ct_H: get_data.data.result[0].avg_cycletime,
-        ect1_H: get_data.data.result[0].utl_total,
-        ect2_H: get_data.data.result[0].prod_shift1,
-        idle_time1_H: get_data.data.result[0].ng_total,
-        idle_time2_H: get_data.data.result[0].ng_p,
-        tng_H: get_data.data.result[0].tng,
+        avg_ct_H: get_data.data.result[0].avgct,
+        ect1_H: get_data.data.result[0].cth1,
+        ect2_H: get_data.data.result[0].cth2,
+        idle_time1_H: get_data.data.result[0].idh1,
+        idle_time2_H: get_data.data.result[0].idh2,
         prod_total_H: get_data.data.result[0].prod_total,
-        yr_H: get_data.data.result[0].ng_p,
       });
     }
 
     // for (let index = 0; index < arr_mc.length; index++) {
-    let array = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
-      date: this.state.start_date,
-      machine: this.state.selected_machine + "H",
-    });
-    // console.log("R", array.data);
-    // console.log(mc_data.data.result);
-    // console.log(mc_data.data.result[0].topic);
+    // let array = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
+    //   date: this.state.start_date,
+    //   machine: this.state.selected_machine + "H",
+    // });
+    // // console.log("R", array.data);
+    // // console.log(mc_data.data.result);
+    // // console.log(mc_data.data.result[0].topic);
 
-    let arrayData = array.data.result;
-    const data_status = arrayData.map((item) => item.sumtime);
-    const name = arrayData.map((item) => item.topic);
-    // console.log(data_status);
-    // console.log(name);
+    // let arrayData = array.data.result;
+    // const data_status = arrayData.map((item) => item.sumtime);
+    // const name = arrayData.map((item) => item.topic);
+    // // console.log(data_status);
+    // // console.log(name);
 
-    await this.setState({
-      data_status_H: data_status, //[run[0], stop[0], alarm[0], wait[0], full[0]],
-      name_label_H: name,
-      data_mc_H: this.state.selected_machine + "H",
-      count_mc_H: 999, //newArr_MC.length,
-      loading: "off",
-    });
+    // await this.setState({
+    //   data_status_H: data_status, //[run[0], stop[0], alarm[0], wait[0], full[0]],
+    //   name_label_H: name,
+    //   data_mc_H: this.state.selected_machine + "H",
+    //   count_mc_H: 999, //newArr_MC.length,
+    //   loading: "off",
+    // });
     // console.log("=================");
     // console.log(this.state.data_status);
 
@@ -349,6 +367,81 @@ class Mms_brh_allmc extends Component {
     );
   };
 
+  getChart_B = async () => {
+    let array = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
+      date: this.state.start_date,
+      machine: this.state.selected_machine + "B",
+    });
+    // console.log("B", array.data);
+    // console.log(mc_data.data.result);
+    // console.log(mc_data.data.result[0].topic);
+    let arrayData = array.data.result;
+    if (arrayData.length > 0) {
+      const data_status = arrayData.map((item) => item.sumtime);
+      const name = arrayData.map((item) => item.alarm);
+      // console.log(data_status);
+      // console.log(name);
+
+      await this.setState({
+        data_status_B: data_status, //[run[0], stop[0], alarm[0], wait[0], full[0]],
+        name_label_B: name,
+        data_mc_B: this.state.selected_machine + "B",
+        count_mc_B: 999, //newArr_MC.length,
+        loading: "off",
+      });
+    } else {
+      console.log("B >> No chart");
+    }
+    //  R
+    let array_R = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
+      date: this.state.start_date,
+      machine: this.state.selected_machine + "R",
+    });
+    let arrayData_R = array_R.data.result;
+    if (arrayData_R.length > 0) {
+      const data_status_R = arrayData_R.map((item) => item.sumtime);
+      const name_R = arrayData_R.map((item) => item.alarm);
+      // console.log(data_status);
+      // console.log(name);
+
+      await this.setState({
+        data_status_R: data_status_R, //[run[0], stop[0], alarm[0], wait[0], full[0]],
+        name_label_R: name_R,
+        data_mc_R: this.state.selected_machine + "R",
+        count_mc_R: 999, //newArr_MC.length,
+      });
+    } else {
+      console.log("R >> No chart");
+    }
+    // H
+    let array_H = await httpClient.post(server.MMS_CHART_ALARMLIST_GD, {
+      date: this.state.start_date,
+      machine: this.state.selected_machine + "H",
+    });
+    let arrayData_H = array_H.data.result;
+    if (arrayData_H.length > 0) {
+      const data_status_H = arrayData_H.map((item) => item.sumtime);
+      const name_H = arrayData_H.map((item) => item.alarm);
+      // console.log(data_status);
+      // console.log(name);
+
+      await this.setState({
+        data_status_H: data_status_H, //[run[0], stop[0], alarm[0], wait[0], full[0]],
+        name_label_H: name_H,
+        data_mc_H: this.state.selected_machine + "H",
+        count_mc_H: 999, //newArr_MC.length,
+      });
+    } else {
+      console.log("H >> No chart");
+    }
+    setTimeout(
+      function () {
+        //Start the timer
+        this.getChart_B();
+      }.bind(this),
+      600000 //10 min
+    );
+  };
   clear_state_B = async () => {
     await this.setState({
       data_status_B: [],
@@ -361,6 +454,7 @@ class Mms_brh_allmc extends Component {
       tng_B: 0,
       prod_total_B: 0,
       yr_B: 0,
+      utl_B: 0,
       loading: "on",
     });
   };
@@ -369,13 +463,10 @@ class Mms_brh_allmc extends Component {
       data_status_R: [],
       data_mc_R: [],
       count_mc_R: 0,
-      avg_ct_R: 0,
       ect_R: 0,
       idle_time_R: 0,
-      ng_total_R: 0,
-      tng_R: 0,
       prod_total_R: 0,
-      yr_R: 0,
+      utl_R: 0,
       //   loading: "on",
     });
   };
@@ -388,9 +479,7 @@ class Mms_brh_allmc extends Component {
       ect1_H: 0,
       idle_time1_H: 0,
       idle_time2_H: 0,
-      tng_H: 0,
       prod_total_H: 0,
-      yr_H: 0,
       //   loading: "on",
     });
   };
@@ -398,17 +487,19 @@ class Mms_brh_allmc extends Component {
     if (prevState.start_date !== this.state.start_date) {
       await this.setState({ loading: "on" });
       await this.getOutput_ball_B();
-      await this.getOutput_ball_R();
+      // await this.getOutput_ball_R();
       await this.getOutput_ball_H();
       await this.get_prod_gd();
       await this.get_prod_gd_B_R();
+      await this.getChart_B();
     } else if (prevState.selected_machine !== this.state.selected_machine) {
       await this.setState({ loading: "on" });
       await this.getOutput_ball_B();
-      await this.getOutput_ball_R();
+      // await this.getOutput_ball_R();
       await this.getOutput_ball_H();
       await this.get_prod_gd();
       await this.get_prod_gd_B_R();
+      await this.getChart_B();
     }
   };
   handleSearch_MC = (event) => {
@@ -433,9 +524,9 @@ class Mms_brh_allmc extends Component {
     return (
       <div className="content-wrapper">
         <div className="content">
-          <h4 className="row justify-content-end">
+          <h6 className="row justify-content-end">
             Date: {moment().format("YYYY-MM-DD")} {moment().format("HH:mm:ss")}
-          </h4>
+          </h6>
 
           <div
             className="row justify-content-center"
@@ -445,10 +536,10 @@ class Mms_brh_allmc extends Component {
               paddingBottom: "10px",
             }}
           >
-            <h5 className="col-auto">Date :</h5>
+            <h6 className="col-auto">Date :</h6>
             <div className="col-2">
               <input
-                className="form-control"
+                className="form-control form-control-sm"
                 type="date"
                 value={this.state.start_date}
                 onChange={this.handleSearch_date}
@@ -457,12 +548,12 @@ class Mms_brh_allmc extends Component {
                 // }}
               />
             </div>
-            <h5 className="col-auto">Select M/C No. :</h5>
+            <h6 className="col-auto">Select M/C No. :</h6>
 
             <div className="col-md-2">
               <select
                 value={this.state.selected_machine}
-                className="form-control"
+                className="form-control form-control-sm"
                 onChange={this.handleSearch_MC}
                 // onChange={(e) => {
                 //   this.setState({ selected_machine: e.target.value });
@@ -474,7 +565,8 @@ class Mms_brh_allmc extends Component {
           </div>
           <div className="row">
             <div className="col-4">
-              <div className="card">
+              <div className="card" id="card-B">
+
                 <div className="card-body">
                   {/*<h4 className="card-title">Bore</h4> */}
                   {/* <h3
@@ -484,98 +576,102 @@ class Mms_brh_allmc extends Component {
                     Bore
                   </h3> */}
                   <div className="d-flex justify-content-between">
-                    <h3
+                    <h6
                       className="card-subtitle mb-2 text-muted"
                       style={{ textAlign: "center" }}
                     >
                       Bore
-                    </h3>
-                    <h3
+                    </h6>
+                    <h6
                       className="card-subtitle mb-2 text-muted"
                       style={{ textAlign: "right" }}
                     >
                       {this.state.selected_machine + "B"}
-                    </h3>
+                    </h6>
                   </div>
 
-                  <div >
-                    <div style={{height:"280px"}}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        C/T
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.ect_B / 100 + " sec"}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        IDLE TIME
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.idle_time_B / 100 + " sec"}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        Yield
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.yr_B / 10 + " %"}
-                      />
-                    </div>
+                  <div>
+                    <div style={{ height: "280px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          C/T
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.ect_B / 100 + " sec"}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          IDLE TIME
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.idle_time_B / 100 + " sec"}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          Yield
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.yr_B / 10 + " %"}
+                        />
+                      </div>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        UTL
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={
-                          ((this.state.last_prod_B / 1440) * 100).toFixed(2) +
-                          " %"
-                        }
-                      />
-                    </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          UTL
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          // value={
+                          //   ((this.state.utl_B / 1440) * 100).toFixed(2) +
+                          //   " %"
+                          // }
+                          value={
+                            ((this.state.last_prod_B / 1440) * 100).toFixed(2) +
+                            " %"
+                          }
+                        />
+                      </div>
                     </div>
                     <div
                       style={{
@@ -588,6 +684,9 @@ class Mms_brh_allmc extends Component {
                         options={{
                           chart: {
                             type: "pie",
+                          },
+                          legend: {
+                            position: 'bottom'
                           },
                           title: {
                             text: "Time alarm list",
@@ -647,7 +746,7 @@ class Mms_brh_allmc extends Component {
               </div>
             </div>
             <div className="col-4">
-              <div className="card">
+              <div className="card" id="card-R">
                 <div className="card-body">
                   {/*<h4 className="card-title">Bore</h4> */}
                   {/* <h3
@@ -657,79 +756,79 @@ class Mms_brh_allmc extends Component {
                     R/W
                   </h3> */}
                   <div className="d-flex justify-content-between">
-                    <h3
+                    <h6
                       className="card-subtitle mb-2 text-muted"
                       style={{ textAlign: "center" }}
                     >
                       R/W
-                    </h3>
-                    <h3
+                    </h6>
+                    <h6
                       className="card-subtitle mb-2 text-muted"
                       style={{ textAlign: "right" }}
                     >
                       {this.state.selected_machine + "R"}
-                    </h3>
+                    </h6>
                   </div>
                   <div>
-                    <div style={{height:"280px"}}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        C/T
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.ect_R / 100 + " sec"}
-                      />
+                    <div style={{ height: "280px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          C/T
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.ect_R / 100 + " sec"}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          IDLE TIME
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.idle_time_R / 100 + " sec"}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          UTL
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={
+                            ((this.state.last_prod_R / 1440) * 100).toFixed(2) +
+                            " %"
+                          }
+                        />
+                      </div>
                     </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        IDLE TIME
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.idle_time_R / 100 + " sec"}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        UTL
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={
-                          ((this.state.last_prod_R / 1440) * 100).toFixed(2) +
-                          " %"
-                        }
-                      />
-                    </div>
-</div>
                     <div
                       style={{
                         // display: "flex",
@@ -742,6 +841,9 @@ class Mms_brh_allmc extends Component {
                           chart: {
                             type: "pie",
                           },
+                          legend: {
+                            position: 'bottom'
+                          },
                           title: {
                             text: "Time alarm list",
                             align: "center",
@@ -751,8 +853,7 @@ class Mms_brh_allmc extends Component {
                             },
                           },
                           //[
-                          labels:
-                            this.state.name_label_R,
+                          labels: this.state.name_label_R,
                           responsive: [
                             {
                               breakpoint: 480,
@@ -802,7 +903,7 @@ class Mms_brh_allmc extends Component {
               </div>
             </div>
             <div className="col-4">
-              <div className="card">
+              <div className="card" id="card-H">
                 <div className="card-body">
                   {/*<h4 className="card-title">Bore</h4> */}
                   {/* <h3
@@ -812,115 +913,115 @@ class Mms_brh_allmc extends Component {
                     S/F
                   </h3> */}
                   <div className="d-flex justify-content-between">
-                    <h3
+                    <h6
                       className="card-subtitle mb-2 text-muted"
                       style={{ textAlign: "center" }}
                     >
                       S/F
-                    </h3>
-                    <h3
+                    </h6>
+                    <h6
                       className="card-subtitle mb-2 text-muted"
                       style={{ textAlign: "right" }}
                     >
                       {this.state.selected_machine + "H"}
-                    </h3>
+                    </h6>
                   </div>
                   <div>
-                    <div style={{height:"280px"}}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        C/T H1
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.ect1_H / 100 + " sec"}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        C/T H2
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.ect2_H / 100 + " sec"}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        // marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        IDLE TIME H1
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.idle_time1_H / 100 + " sec"}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        // marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        IDLE TIME H2
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={this.state.idle_time1_H / 100 + " sec"}
-                      />
-                    </div>
+                    <div style={{ height: "280px" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          C/T H1
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.ect1_H / 100 + " sec"}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          C/T H2
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.ect2_H / 100 + " sec"}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          // marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          IDLE TIME H1
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.idle_time1_H / 100 + " sec"}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          // marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          IDLE TIME H2
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={this.state.idle_time1_H / 100 + " sec"}
+                        />
+                      </div>
 
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <label style={{ width: "100px", marginRight: "10px" }}>
-                        UTL
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        style={{ flex: "1" }}
-                        placeholder="value"
-                        value={
-                          ((this.state.last_prod_H / 1440) * 100).toFixed(2) +
-                          " %"
-                        }
-                      />
-                    </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <label style={{ width: "100px", marginRight: "10px" }}>
+                          UTL
+                        </label>
+                        <input
+                          type="text"
+                          className="form-control form-control-sm"
+                          style={{ flex: "1" }}
+                          placeholder="value"
+                          value={
+                            ((this.state.last_prod_H / 1440) * 100).toFixed(2) +
+                            " %"
+                          }
+                        />
+                      </div>
                     </div>
                     <div
                       style={{
@@ -933,6 +1034,9 @@ class Mms_brh_allmc extends Component {
                         options={{
                           chart: {
                             type: "pie",
+                          },
+                          legend: {
+                            position: 'bottom'
                           },
                           title: {
                             text: "Time alarm list",
@@ -995,10 +1099,10 @@ class Mms_brh_allmc extends Component {
           </div>
           <div className="row">
             <div className="col-12">
-              <div className="card">
-                <h3 className="card-header">
+              <div className="card" id="chart-prod">
+                <h5 className="card-header">
                   Production : {this.state.selected_machine + "H"}
-                </h3>
+                </h5>
                 <div className="card-body">
                   <div id="chart">
                     <ReactApexChart
@@ -1151,70 +1255,70 @@ class Mms_brh_allmc extends Component {
           </div>
           <div className="row">
             <div className="col-3">
-              <div className="card">
+              <div className="card" id="shift-A">
                 <div
                   className="card-body"
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h3 style={{ marginRight: "auto" }}>Shift A</h3>
-                  <h3
+                  <h5 style={{ marginRight: "auto" }}>Shift A</h5>
+                  <h5
                     style={{
                       color:
-                        this.state.prod_shift_A_H < (1440 * 8) ? "red" : "black",
+                        this.state.prod_shift_A_H < 1440 * 8 ? "red" : "black",
                       marginLeft: "auto",
                     }}
                   >
                     {this.state.prod_shift_A_H + " pcs"}
-                  </h3>
+                  </h5>
                 </div>
               </div>
             </div>
             <div className="col-3">
-              <div className="card">
+              <div className="card" id="shift-B">
                 <div
                   className="card-body"
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h3 style={{ marginRight: "auto" }}>Shift B</h3>
-                  <h3
+                  <h5 style={{ marginRight: "auto" }}>Shift B</h5>
+                  <h5
                     style={{
                       color:
-                        this.state.prod_shift_B_H < (1440 * 8) ? "red" : "black",
+                        this.state.prod_shift_B_H < 1440 * 8 ? "red" : "black",
                       marginLeft: "auto",
                     }}
                   >
-                    {this.state.prod_shift_B_H +
-                      " pcs"}
-                  </h3>
+                    {this.state.prod_shift_B_H + " pcs"}
+                  </h5>
                 </div>
               </div>
             </div>
             <div className="col-3">
-              <div className="card">
+              <div className="card" id="shift-C">
                 <div
                   className="card-body"
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h3 style={{ marginRight: "auto" }}>Shift C</h3>
-                  <h3
+                  <h5 style={{ marginRight: "auto" }}>Shift C</h5>
+                  <h5
                     style={{
-                      color: this.state.prod_shift_C_H < (1440 * 8) ? "red" : "black",
+                      color:
+                        this.state.prod_shift_C_H < 1440 * 8 ? "red" : "black",
                       marginLeft: "auto",
                     }}
                   >
                     {this.state.prod_shift_C_H + " pcs"}
-                  </h3>
+                  </h5>
                 </div>
               </div>
             </div>
             <div className="col-3">
-              <div className="card">
+              <div className="card" id="shift-total">
                 <div
                   className="card-body"
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h3 style={{ marginRight: "auto" }}>Shift Total</h3>
-                  <h3
+                  <h5 style={{ marginRight: "auto" }}>Shift Total</h5>
+                  <h5
                     style={{
                       color: 1 < 1440 * 24 ? "red" : "black",
                       marginLeft: "auto",
@@ -1224,7 +1328,7 @@ class Mms_brh_allmc extends Component {
                       this.state.prod_shift_B_H +
                       this.state.prod_shift_C_H +
                       " pcs"}
-                  </h3>
+                  </h5>
                 </div>
               </div>
             </div>

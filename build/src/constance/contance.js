@@ -107,6 +107,11 @@ export const server = {
   chart_GD_mms_URL: `api_nhtGrinding/mms`,
   GANTT_MMS_URL: `api_nhtMMS/gantt_MMS`, //ptdChart
   GET_MASTER_MC_GD: `api_nhtGrinding/master_mc_GD`,
+  GET_MASTER_MC_GD_ONLY: `api_nhtGrinding/master_mc`,
+  GET_MASTER_MC_GD_BASIC: `api_nhtGrinding/master_mc_GD_basic`,
+  GET_MASTER_MC_GD_TOPIC: `api_nhtGrinding/master_mc_GD_topic`,
+  GET_MASTER_MC_GD_DAILY: `api_nhtGrinding/master_mc_GD_basic_daily`,
+
   mc_status_log_GD: `api_nhtGrinding/GD_mms_log`,
   TIMELINE_ALARMLIST_GD: `api_nhtGrinding/Timeline_Alarmlist_GD`,
   AlarmTopic_time_TB: `api_nhtGrinding/AlarmTopic_time`,
@@ -128,6 +133,10 @@ export const server = {
   ListTopic_time_GD_HOUR: `api_nhtGrinding/GetTopic_time_hour`,
   GET_MASTER_HOUR: `api_nhtGrinding/master_hour`,
   GET_YIELD_EACH_CT: `api_nhtGrinding/get_yr_each`,
+  GET_MMS_GD_ALL_MC:`api_nhtGrinding/get_data_mms_mc_all`,
+  MMS_CHART_ALARMLIST_GD:`api_nhtGrinding/data_pie_Alarmlist_GD`,
+  MMS_PROD_GD_SET_MC:`api_nhtGrinding/MMS_prod_IC_GD`,
+  
 
   MMS_GD_ICB:`api_nhtGrinding/mms_counter_ICB`,
   API_UPLOAD_STOCK: `api_upload_stock/upload_stock`,
