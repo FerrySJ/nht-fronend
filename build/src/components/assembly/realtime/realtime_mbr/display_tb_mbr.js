@@ -140,7 +140,7 @@ class Display_tb_mbr extends React.Component {
           <div className="container-fluid">
             <div className="row-12" style={{ paddingTop: "10px" }}>
               <div className="card">
-                <h4 className="card-header">Mornitoring All Machine NO.</h4>
+                <h5 className="card-header">Mornitoring All Machine NO.</h5>
 
                 {/* <h5 className="card-title" style={{ color: "red", textAlign: "end" }}><b>( Total: {this.state.countitem} M/C )</b></h5> */}
                 <div className="card-body">
@@ -149,11 +149,11 @@ class Display_tb_mbr extends React.Component {
                     style={{ textAlign: "center", paddingBottom: "10px" }}
                   >
                     <div className="col-auto">
-                      <h5 style={{ paddingTop: "6px" }}>Select Date :</h5>
+                      <h6 style={{ paddingTop: "6px" }}>Select Date :</h6>
                     </div>
                     <div className="col-2">
                       <input
-                        className="form-control"
+                        className="form-control form-control-sm"
                         type="date"
                         value={this.state.start_date}
                         // onChange={async (e) => {
@@ -180,7 +180,7 @@ class Display_tb_mbr extends React.Component {
                     {this.loadingScreen()}
                     <div
                       className="card-body table-responsive p-0"
-                      style={{ height: "450px" }}
+                      style={{ height: "450px" , fontSize:14}}
                     >
                       <table
                         className="table table-head-fixed text-nowrap table-bordered table-hover"

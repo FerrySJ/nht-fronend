@@ -5,6 +5,7 @@ import moment from "moment";
 import { httpClient } from "../../../utils/HttpClient";
 import { server } from "../../../constance/contance";
 import ReactApexChart from "react-apexcharts";
+import Swal from "sweetalert2";
 import "./MMS_MBRMD.css";
 
 const MMS_MBRMD_PROD_TOTAL = () => {
@@ -31,7 +32,18 @@ const MMS_MBRMD_PROD_TOTAL = () => {
         moment().format("HH")
     );
 
-    // console.log("ChartPD ==>", array.data.resultOutput_MBR);
+    // console.log("ChartPD ==>", array.data);
+    if (array.data.result.length === 0) {
+      Swal.fire({
+          icon: "warning",
+          title: "Can't find data of " + dataMC,
+          showConfirmButton: false,
+          timer: 1500,
+        }).then((v) => {
+          setMC("MBRMD")
+        })
+    } else {
+      
     const listOutput_MBR_MD = array.data.result_data;
     const list_mc = array.data.result_mc;
     const list_data = array.data.result[0];
@@ -76,6 +88,7 @@ const MMS_MBRMD_PROD_TOTAL = () => {
       // Handle the error or log it
       console.error("Error mapping over data_table:", error);
     }
+  }
 
     return array;
   };
@@ -105,9 +118,9 @@ const MMS_MBRMD_PROD_TOTAL = () => {
       <div className="content">
         {/* <div className="row" style={{ paddingTop: "15px" }}> */}
         {/* <div className="col-lg-12"> */}
-        <h4 className="row justify-content-end">
+        <h6 className="row justify-content-end">
           Date: {moment().format("YYYY-MM-DD")} {moment().format("HH:mm:ss")}
-        </h4>
+        </h6>
 
         <div
           className="row justify-content-center"
@@ -117,10 +130,10 @@ const MMS_MBRMD_PROD_TOTAL = () => {
             paddingBottom: "10px",
           }}
         >
-          <h5 className="col-auto">Date :</h5>
+          <h6 className="col-auto">Date :</h6>
           <div className="col-2">
             <input
-              className="form-control"
+              className="form-control form-control-sm"
               type="date"
               value={dataDate}
               onChange={async (e) => {
@@ -128,10 +141,10 @@ const MMS_MBRMD_PROD_TOTAL = () => {
               }}
             />
           </div>
-          <h5 className="col-auto">Select M/C No. :</h5>
+          <h6 className="col-auto">Select M/C No. :</h6>
           <div className="col-2">
             <select
-              className="custom-select"
+              className="custom-select custom-select-sm"
               value={dataMC}
               onChange={async (e) => {
                 await setMC(e.target.value);
@@ -156,9 +169,9 @@ const MMS_MBRMD_PROD_TOTAL = () => {
           </div> */}
         </div>
         <div className="row justify-content-center">
-          <h2>
+          <h4>
             {dataMC} : <b>{dataProd}</b> (pcs)
-          </h2>
+          </h4>
         </div>
         <div
           className="row justify-content-center"
@@ -166,7 +179,7 @@ const MMS_MBRMD_PROD_TOTAL = () => {
         >
           <div className="col-lg-12">
             <div className="card">
-              <h3
+              <h5
                 className="card-header"
                 style={{
                   display: "grid",
@@ -178,7 +191,7 @@ const MMS_MBRMD_PROD_TOTAL = () => {
                 <span style={{ textAlign: "end", fontSize: "18px" }}>
                   Data at time : {datas.time}
                 </span>
-              </h3>
+              </h5>
 
               <div className="card-body">
                 <div id="chart">
@@ -319,7 +332,7 @@ const MMS_MBRMD_PROD_TOTAL = () => {
         </div>
         <div className="row-12">
           <div className="card">
-            <h3
+            <h5
               className="card-header"
               style={{
                 display: "grid",
@@ -331,7 +344,7 @@ const MMS_MBRMD_PROD_TOTAL = () => {
               <span style={{ textAlign: "end", fontSize: "18px" }}>
                 Data at time : {datas.time}
               </span>
-            </h3>
+            </h5>
             <div className="row justify-content-center">
               <div
                 className="col-lg-7"
