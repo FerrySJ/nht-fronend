@@ -35,3 +35,16 @@
   .button-24:active {
     opacity: .5;
   }
+  
+  #card_prod {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  
+  border: 2px solid #9AC8E9;
+  border-radius: 10px; 
+}
+#card_prod_total {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  
+  border: 2px solid #ff5e5e;
+  border-radius: 10px; 
+}

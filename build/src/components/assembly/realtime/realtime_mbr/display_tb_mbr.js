@@ -5,6 +5,7 @@ import { server } from "../../../../constance/contance";
 import moment from "moment";
 import { Hourglass } from "react-loader-spinner";
 import Chart_ball_usage_day from "./chart_ball_usage_day";
+import "./realtime_mbr.css";
 
 class Display_tb_mbr extends React.Component {
   constructor(props) {
@@ -23,6 +24,10 @@ class Display_tb_mbr extends React.Component {
       // start_date: moment().startOf("month").format("YYYY-MM-DD"),
       yesterday: moment().subtract(1, "days").format("YYYY-MM-DD"),
       attime: "",
+      prod_total: 0,
+      prod_md: 0,
+      prod_ma: 0,
+      prod_ffl: 0,
     };
   }
 
@@ -51,6 +56,22 @@ class Display_tb_mbr extends React.Component {
     if (array.data.result[0].length > 0) {
       this.setState({
         data_table: array.data.result[0],
+
+        // prod_md: array.data.result_prod_total.MBRMD,
+        // prod_ma: array.data.result_prod_total.MBRMA,
+        prod_md:
+          array.data.result_prod_total.MBRMD != null
+            ? array.data.result_prod_total.MBRMD
+            : 0,
+        prod_ma:
+          array.data.result_prod_total.MBRMA != null
+            ? array.data.result_prod_total.MBRMA
+            : 0,
+        prod_ffl:
+          array.data.result_prod_total.MINIFFL != null
+            ? array.data.result_prod_total.MINIFFL
+            : 0,
+        prod_total: array.data.totalSum != null ? array.data.totalSum : 0,
         countitem: array.data.result[0].length,
         attime: array.data.result[0][0].at_time,
         loading: "off",
@@ -166,7 +187,7 @@ class Display_tb_mbr extends React.Component {
                         onChange={this.handleSearch} // เมื่อมีการเปลี่ยนแปลงของ input ให้เรียกใช้ handleSearch
                       />
                     </div>
-                    <div className="col-end"></div>
+                    {/* <div className="col-end"></div> */}
                   </div>
                   <div className="row justify-content-end">
                     <div className="col-auto" style={{ color: "red" }}>
@@ -176,11 +197,85 @@ class Display_tb_mbr extends React.Component {
                       At time : {this.state.attime}
                     </div>
                   </div>
+                  <div className="row justify-content-center">
+                    <div className="col-3">
+                      <div className="card" id="card_prod">
+                        <div
+                          className="card-body"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <h6>
+                            <b>MBR_MD</b>
+                          </h6>
+                          <h6>
+                            <b>{this.state.prod_md}</b>
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-3">
+                      <div className="card" id="card_prod">
+                        <div
+                          className="card-body"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <h6>
+                            <b>MBR_MA</b>
+                          </h6>
+                          <h6>
+                            <b>{this.state.prod_ma}</b>
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-3">
+                      <div className="card" id="card_prod">
+                        <div
+                          className="card-body"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <h6>
+                            <b>MINI_FFL</b>
+                          </h6>
+                          <h6>
+                            <b>{this.state.prod_ffl}</b>
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-3">
+                      <div className="card" id="card_prod_total">
+                        <div
+                          className="card-body"
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <h6>
+                            <b>TOTAL</b>
+                          </h6>
+                          <h6>
+                            <b>{this.state.prod_total}</b>
+                          </h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div className="overlay-wrapper">
                     {this.loadingScreen()}
                     <div
                       className="card-body table-responsive p-0"
-                      style={{ height: "450px" , fontSize:14}}
+                      style={{ height: "450px", fontSize: 14 }}
                     >
                       <table
                         className="table table-head-fixed text-nowrap table-bordered table-hover"
