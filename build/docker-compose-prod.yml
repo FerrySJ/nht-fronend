@@ -1,7 +1,7 @@
 version: "3.3"
 services:
     react-app:
-      image: "nhtminebea/nht-dx-frontend:manual4"
+      image: "nhtminebea/nht-dx-frontend:manual5"
       build:
         context: .
         dockerfile: Dockerfile.prod
