@@ -114,6 +114,7 @@ class Display_tb_mbr extends React.Component {
             <td style={{ color: item.bg_yield }}>{item.yield}</td>
             <td style={{ color: item.bg_utl }}>{item.UTL}</td>
             <td>{item.DT}</td>
+            <td>{item.wait_time}</td>
           </tr>
         ));
       }
@@ -283,20 +284,21 @@ class Display_tb_mbr extends React.Component {
                       >
                         <thead>
                           <tr>
-                            <th>MC no</th>
-                            <th>Model</th>
-                            <th>
-                              Production <b style={{ color: "#35FB00" }}>OK</b>{" "}
+                            <th className="centered">M/C No</th>
+                            <th className="centered">Model</th>
+                            <th className="centered">
+                              Production <br/><b style={{ color: "#35FB00" }}>OK</b>{" "}
                               total (pcs)
                             </th>
-                            <th>
-                              Production <b style={{ color: "red" }}>NG</b>{" "}
+                            <th className="centered">
+                              Production <br/><b style={{ color: "red" }}>NG</b>{" "}
                               total (pcs)
                             </th>
-                            <th>Cycle time (sec)</th>
-                            <th>Yield (%)</th>
-                            <th>Utillization (%)</th>
-                            <th>Down time (min)</th>
+                            <th className="centered">Cycle time (sec)</th>
+                            <th className="centered">Yield (%)</th>
+                            <th className="centered">Utillization (%)</th>
+                            <th className="centered">Down time (min)</th>
+                            <th className="centered">Wait time (min)</th>
                           </tr>
                         </thead>
                         <tbody>{this.renderTable()}</tbody>
