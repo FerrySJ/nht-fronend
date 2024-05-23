@@ -1,5 +1,4 @@
 import React from "react";
-import ReactApexCharts from "react-apexcharts";
 import { httpClient } from "../../../../utils/HttpClient";
 import { server } from "../../../../constance/contance";
 import moment from "moment";
@@ -305,6 +304,7 @@ class Display_tb_mbr extends React.Component {
                       </table>
                     </div>
                     <small>
+                    * Use <b>Production Total</b> for the calculation <b>Utillization</b>.<br/>
                       * If <b>Production NG</b> more, then 1000 show message
                       red, if <b>UTL</b> less, then 80 show message red, if{" "}
                       <b>Yield</b> less, then 80 show message red and if{" "}
