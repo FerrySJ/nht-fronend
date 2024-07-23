@@ -1,3 +1,4 @@
+// after check cmd : ssh -T git@github.com
 
   import React, { Component } from "react";
 import { useEffect, useState } from "react";
