@@ -145,7 +145,16 @@ export const server = {
 
   // NEW SERVER
   NEW_SERVER_realtime_MBRC_Ball_tb_URL: `api_nhtMBR/MBRC_Ball_tb_NEW_SERVER`,
- 
+
+  // Auto Noise
+  MASTER_MC_AN: `/api_nhtMaster/master_MC_AutoNoise`,
+  realtime_chartPD_AN_URL: `/api_nhtAN/MMS_prod_yield_AN`,
+  realtime_chartDT_AN_URL: `/api_nhtAN/chart_downtime_AN`,
+  realtime_chartPD_TOTAL_AN_URL: `api_nhtAN/MMS_prod_total_yield_AN`,
+  MMS_AN_ALL_TB: `api_nhtAN/autoNoise_mornitoring_all`, // table mornitor
+  
+  
+  
 };
 
 export const key = {

@@ -8,7 +8,7 @@ class Footer extends Component {
 
 
         <div className="float-right d-none d-sm-inline-block">
-          <b>Version</b> 3.0.1
+          <b>Version</b> 3.0.2
 {/* Update V3 for ip ranet 
           */}
         </div>

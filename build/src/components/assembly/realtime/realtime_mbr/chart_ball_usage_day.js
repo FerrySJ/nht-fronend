@@ -13,46 +13,6 @@ class Chart_ball_usage_day extends React.Component {
     // this.state = { seconds: props.seconds };
 
     this.state = {
-      // series: [
-      //   {
-      //     name: "BALL SIZE -5.0",
-      //     data: [
-      //       0, 0, 0, 0, 0, 1554, 15030, 4980, 22590, 18648, 2430, 6822, 3264,
-      //       25956, 2742, 25767, 0, 0, 0, 0, 0, 0,
-      //     ],
-      //   },
-      //   {
-      //     name: "BALL SIZE -2.5",
-      //     data: [
-      //       94572, 307902, 86442, 106524, 139356, 71286, 267414, 97746, 166968,
-      //       196320, 53460, 93654, 103272, 217188, 46062, 155904, 31260, 53088,
-      //       30828, 23718, 94434, 89640,
-      //     ],
-      //   },
-      //   {
-      //     name: "BALL SIZE 0.0",
-      //     data: [
-      //       556212, 514926, 640260, 551790, 298968, 534144, 438714, 413460,
-      //       443034, 495060, 394608, 320466, 392304, 335748, 370428, 520219,
-      //       228564, 295134, 182532, 329784, 366774, 379962,
-      //     ],
-      //   },
-      //   {
-      //     name: "BALL SIZE +2.5",
-      //     data: [
-      //       191610, 34020, 143286, 120252, 63996, 213120, 63240, 335274, 232812,
-      //       220548, 244230, 351126, 234048, 143694, 323094, 371140, 126150,
-      //       169056, 116190, 169860, 76338, 132654,
-      //     ],
-      //   },
-      //   {
-      //     name: "BALL SIZE +5.0",
-      //     data: [
-      //       0, 0, 0, 0, 0, 2046, 1170, 34794, 17292, 13416, 40734, 61830, 11112,
-      //       20034, 18924, 54971, 0, 0, 0, 0, 0, 0,
-      //     ],
-      //   },
-      // ],
 
       mcno: [],
       ballUsage: [],
@@ -97,21 +57,12 @@ class Chart_ball_usage_day extends React.Component {
     }
   }
   componentDidMount = async () => {
-    // console.log("hjh");
     await this.get_master_process();
     await this.get_master_size();
     await this.Click_value_ball_size();
     // this.timer = setInterval(this.tick, 1000);
-    // console.log(moment('2019-11-03T05:00:00.000Z').utc().format('HH:mm'))
-    // console.log("end");
   };
   Click_value_ball_size = async () => {
-    console.log(
-      "click  process =>",
-      // this.state.process,
-      // this.state.type_part,
-      // this.state.size_part
-    );
     // console.log("click size => ", this.state.size_part, this.state.type_part);
     if (this.state.process === "MA") {
       console.log("click MA");
@@ -123,9 +74,7 @@ class Chart_ball_usage_day extends React.Component {
           moment().format("YYYY-MM-DD"),
         { size: this.state.size_part, type: this.state.type_part }
       );
-      // console.log("=====", array.data.result[1]);
-      // console.log(array.data.resultBall[0].data.length);
-      // console.log(array.data);
+      
       if (array.data.result === "NO DATA") { //check type
         Swal.fire({
           icon: "warning",
@@ -141,7 +90,6 @@ class Chart_ball_usage_day extends React.Component {
         await this.clear_state();
         // window.location.reload();
       } else {
-        console.log("click MA");
         if (array.data.result[1] === 0) {
           Swal.fire({
             icon: "warning",
@@ -156,8 +104,6 @@ class Chart_ball_usage_day extends React.Component {
           });
           await this.clear_state();
         } else {
-        // console.log("array.data.resultBall", array.data.resultBall);
-        // await new Promise((accept) =>
         this.setState(
           {
             ballUsage: array.data.resultBall,
@@ -171,14 +117,7 @@ class Chart_ball_usage_day extends React.Component {
       }
     }
     } else {
-      console.log(
-        "else process MD",
-        this.state.process,
-        this.state.type_part,
-        this.state.size_part
-      );
-
-      // console.log("click MD");
+      
       const array = await httpClient.post(
         server.realtime_MBRC_Ball_Size_MD +
           "/" +
@@ -187,9 +126,7 @@ class Chart_ball_usage_day extends React.Component {
           moment().format("YYYY-MM-DD"),
         { size: this.state.size_part, type: this.state.type_part }
       );
-      // console.log(array.data);
-      // console.log("=====", array.data.result[1]);
-      // console.log(array.data.resultBall[0].data.length);
+      
       if (array.data.result === "NO DATA") {
         Swal.fire({
           icon: "warning",
@@ -205,8 +142,6 @@ class Chart_ball_usage_day extends React.Component {
         await this.clear_state();
         // window.location.reload();
       } else {
-        // console.log("else MD", array.data.resultBall);
-        // let listUsageBall = array.data.resultBall;
         if (array.data.result[1] === 0) {
           Swal.fire({
             icon: "warning",
@@ -256,14 +191,12 @@ class Chart_ball_usage_day extends React.Component {
   };
   get_master_process = async () => {
     const array = await httpClient.get(server.master_process);
-    // console.log(array.data.result[0].process);
     await this.setState({
       list_process: array.data.result,
       process: array.data.result[0].process,
     });
     await this.get_master_type(array.data.result[0].process);
     await this.get_master_size(array.data.result[0].process);
-    // console.log(this.state.process);
   };
 
   get_master_size = async (aa) => {
@@ -271,8 +204,6 @@ class Chart_ball_usage_day extends React.Component {
     const array = await httpClient.post(server.master_size, {
       process: this.state.process,
     });
-    // console.log("---- llllll ----");
-    // console.log(array.data);
 
     await new Promise((accept) =>
       this.setState(
@@ -283,8 +214,6 @@ class Chart_ball_usage_day extends React.Component {
         accept
       )
     );
-    // console.log("end size");
-    // return this.state.first_size
   };
 
   get_master_type = async (aa) => {
@@ -293,7 +222,6 @@ class Chart_ball_usage_day extends React.Component {
       process: aa, //this.state.process,
     });
     // console.log("--------------");
-    // console.log(array.data.result_type);
     await new Promise((accept) =>
       this.setState(
         {
@@ -339,7 +267,7 @@ class Chart_ball_usage_day extends React.Component {
                   style={{
                     marginBottom: "0",
                     fontWeight: 600,
-                    fontSize: "2rem",
+                    fontSize: 18 ,//"2rem",
                   }}
                 >
                   {/* Total: Ball usage (%) */}
@@ -351,12 +279,12 @@ class Chart_ball_usage_day extends React.Component {
                   style={{ textAlign: "center", paddingBottom: "10px" }}
                 >
                   <div className="col-auto">
-                    <h5 style={{ paddingTop: "6px" }}>Process :</h5>
+                    <h6 style={{ paddingTop: "6px" }}>Process :</h6>
                   </div>
                   <div className="col-2">
                     <select
                       value={this.state.process}
-                      className="form-control"
+                      className="form-control form-control-sm"
                       onChange={async (e) => {
                         await this.setState({ process: e.target.value });
                         await this.get_master_type(this.state.process);
@@ -367,12 +295,12 @@ class Chart_ball_usage_day extends React.Component {
                     </select>
                   </div>
                   <div className="col-1">
-                    <h5>Type :</h5>
+                    <h6>Type :</h6>
                   </div>
                   <div className="col-1">
                     <select
                       value={this.state.type_part}
-                      className="form-control"
+                      className="form-control form-control-sm"
                       onChange={(e) => {
                         this.setState({ type_part: e.target.value });
                       }}
@@ -381,12 +309,12 @@ class Chart_ball_usage_day extends React.Component {
                     </select>
                   </div>
                   <div className="col-1">
-                    <h5>Size :</h5>
+                    <h6>Size :</h6>
                   </div>
                   <div className="col-2">
                     <select
                       value={this.state.size_part}
-                      className="form-control"
+                      className="form-control form-control-sm"
                       onChange={(e) => {
                         this.setState({ size_part: e.target.value });
                       }}
@@ -398,7 +326,7 @@ class Chart_ball_usage_day extends React.Component {
                   <div className="col-1">
                     <button
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-primary btn-sm"
                       onClick={async (e) => {
                         // await this.clear_state();
                         e.preventDefault();

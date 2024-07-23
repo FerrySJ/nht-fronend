@@ -68,6 +68,21 @@ class Sidemenu extends Component {
                       {/* <i className="right fas fa-angle-left" /> */}
                     </a>
                   </li>
+                  
+                  <li className="nav-item">
+                    <a href="/mms_an" className="nav-link" style={{ paddingLeft:"2.5rem" }}>
+                      <i className="far fa-square nav-icon" />
+                      
+                      <p>Auto Noise</p>
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a href="/mms_an_table" className="nav-link" style={{ paddingLeft:"2.5rem" }}>
+                      <i className="far fa-square nav-icon" />
+                      
+                      <p>Auto Noise - Table</p>
+                    </a>
+                  </li>
                 </ul>
               </li>
               <li className="nav-item has-treeview">
