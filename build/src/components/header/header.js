@@ -33,9 +33,9 @@ class Header extends Component {
       displal: "none",
     };
     return (
-      <nav className="main-header navbar navbar-expand navbar-white navbar-light" style={{padding:5}}>
+      <nav className="main-header navbar navbar-expand navbar-white navbar-light">
         
-        <ul className="navbar-nav" >
+        <ul className="navbar-nav">
         <li className="nav-item">
             <a
               className="nav-link"
@@ -48,7 +48,7 @@ class Header extends Component {
           </li>
           <li className="nav-item d-none d-sm-inline-block">
             <a href="/mms_mbrmd_full" className="nav-link">
-              <h6><b>NHT Machine Monitoring</b></h6>
+              <h5><b>NHT Machine Monitoring</b></h5>
             </a>
           </li>
           {/* <li

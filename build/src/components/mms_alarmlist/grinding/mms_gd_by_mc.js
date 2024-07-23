@@ -4,7 +4,6 @@ import { server } from "../../../constance/contance";
 import { httpClient } from "../../../utils/HttpClient";
 import ReactApexChart from "react-apexcharts";
 import * as moment from "moment";
-import Swal from "sweetalert2";
 import { FallingLines } from "react-loader-spinner";
 
 import "./grinding.css";
@@ -2070,6 +2069,8 @@ let data = await httpClient.post(
                             fontSize: "16px",
                           }}>
                           <thead>
+
+
                             <tr>
                               <th>STATUS</th>
                               <th>TIME (HH:mm:ss)</th>
@@ -2105,8 +2106,8 @@ let data = await httpClient.post(
                           fontWeight: "'bold'",
                         }}
                       >
-                        <i className="fas fa-exclamation-triangle"></i>TOPIC
-                        NON-OPERATING :
+                        <i className="fas fa-exclamation-triangle"></i>Topic
+                        Non-operating :
                         <b>{this.state.selected_machine}</b>
                       </h5>
                     </div>

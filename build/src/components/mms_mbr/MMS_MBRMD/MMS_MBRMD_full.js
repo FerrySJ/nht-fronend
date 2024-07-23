@@ -62,11 +62,8 @@ const MMS_MBRMD_full = () => {
         dataDate
     );
 
-    // console.log("ChartPD ==>", array.data);
+    // console.log("ChartPD ==>", array.data.resultOutput_MBR);
     const listOutput_MBR_MD = array.data.resultOutput_MBR;
-
-    if (listOutput_MBR_MD.length > 0) {
-      
     setdataPD(listOutput_MBR_MD);
     const categories = array.data.result[0].map((data) => data.cat_time);
     setChartData(categories)
@@ -89,18 +86,7 @@ const MMS_MBRMD_full = () => {
     setdataAVG_utl(finalAVG_utl)
     setDataMax(max_prod);
     return array;
-  }else{
-    // console.log("0 0 0 0 0 ");
-    setdataPD([]);
-    setChartData([])
-
-    setDatasMaster([]);
-    setDataOK([]);
-    setDataBox([]);
-    setdataAVG_utl(0)
-    setDataMax([]);
-  }
-};
+  };
   const getOutput_DT_MBR_MD = async () => {
     // console.log("========= DT =========");
     // console.log("dataMC chart DT : ", dataMC);
@@ -558,10 +544,6 @@ const MMS_MBRMD_full = () => {
                     options={{
                       chart: {
                         type: "pie",
-                      },
-                      
-                      legend: {
-                        position: "bottom",
                       },
                       labels: dataDT_series,
                       responsive: [

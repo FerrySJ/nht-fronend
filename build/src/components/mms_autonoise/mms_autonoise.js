@@ -32,7 +32,6 @@ const Mms_autonoise = () => {
         dataDate
     );
 
-    // console.log("ChartPD ==>", array.data);
     const listOutput_MBR_MD = array.data.resultOutput_MBR;
 
     if (listOutput_MBR_MD.length > 0) {
