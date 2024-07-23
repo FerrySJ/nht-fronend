@@ -1,33 +1,33 @@
 
 #card-B {
-    border: 2px solid #92C4E5; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
-  #card-R {
-    border: 2px solid #92E5B5; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
-  #card-H {
-    border: 2px solid #f79bf2; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
-  #shift-A {
-    border: 2px solid #F299AE; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
-  #shift-B {
-    border: 2px solid #8E8FFF; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
-  #shift-C {
-    border: 2px solid #FBBF93; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
-  #shift-total {
-    border: 2px solid #71FCE7; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
-  #chart-prod {
-    border: 2px solid #FB96CA; /* ขนาดขอบ 2 พิกเซล และสีแดง */
-    border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
-  }
+  border: 2px solid #92C4E5; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}
+#card-R {
+  border: 2px solid #92E5B5; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}
+#card-H {
+  border: 2px solid #f79bf2; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}
+#shift-A {
+  border: 2px solid #F299AE; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}
+#shift-B {
+  border: 2px solid #8E8FFF; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}
+#shift-C {
+  border: 2px solid #FBBF93; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}
+#shift-total {
+  border: 2px solid #71FCE7; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}
+#chart-prod {
+  border: 2px solid #FB96CA; /* ขนาดขอบ 2 พิกเซล และสีแดง */
+  border-radius: 10px; /* ขอบมนุษย์ขนาด 10 พิกเซล */
+}

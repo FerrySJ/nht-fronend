@@ -18,6 +18,7 @@ class MMS_table_an extends React.Component {
       countitem: 0,
       loading: "on",
       start_date: moment().format("YYYY-MM-DD"),
+      // start_date: moment().startOf("month").format("YYYY-MM-DD"),
       yesterday: moment().subtract(1, "days").format("YYYY-MM-DD"),
       attime: "",
       prod_total: 0,

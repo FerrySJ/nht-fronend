@@ -9,7 +9,6 @@ export const APP_TITLE = "Developed by";
 
 
 // ========== test local ================
-// export const apiUrl = "http://localhost:2023/api/"; 
 // export const api_Influx = "http://192.168.1.1:4012"; 
 // export const Image_apiUrl = "http://192.168.1.107:4012/"; 
 
@@ -19,7 +18,8 @@ export const APP_TITLE = "Developed by";
 // export const Image_apiUrl = "http://192.168.1.107:4012/"; 
 
 // ========== Server NHT  (New Server) ================
-export const apiUrl = "http://10.120.139.25:4009/api/"; //TWN
+// export const apiUrl = "http://10.120.139.25:4009/api/"; //TWN
+export const apiUrl = "http://localhost:2023/api/"; 
 
 // export const apiUrl = "http://10.128.16.120:2005/api/"; //Server
 // ========== ======================== ================
