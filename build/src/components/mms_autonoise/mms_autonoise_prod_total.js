@@ -30,6 +30,7 @@ const MMS_AN_PROD_TOTAL = () => {
         moment().format("HH")
     );
 
+    // console.log("ChartPD ==>", array.data);
     if (array.data.result.length === 0) {
       Swal.fire({
           icon: "warning",

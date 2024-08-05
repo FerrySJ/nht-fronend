@@ -81,7 +81,6 @@ class MMS_GD extends Component {
       selected_machine: mc_list_data.data.result[0].mc_no,
       //date_start: moment().add(-0, "days").format("2023-01-13"),
     });
-    console.log(this.state.selected_machine);
   };
 
   loadingScreen() {
@@ -3263,7 +3262,7 @@ class MMS_GD extends Component {
   renderTable_B() {
     if (this.state.data_table_B != null) {
       return this.state.data_table_B.map((item) => (
-        <tr>
+        <tr key={item.id}>
           <td>
             <span className={item.bg_badge}>{item.status}</span>
           </td>
@@ -3275,7 +3274,7 @@ class MMS_GD extends Component {
   renderTable_R() {
     if (this.state.data_table_R != null) {
       return this.state.data_table_R.map((item) => (
-        <tr>
+        <tr key={item.id}>
           <td>
             <span className={item.bg_badge}>{item.status}</span>
           </td>
@@ -3287,7 +3286,7 @@ class MMS_GD extends Component {
   renderTable_H() {
     if (this.state.data_table_H != null) {
       return this.state.data_table_H.map((item) => (
-        <tr>
+        <tr key={item.id}>
           <td>
             <span className={item.bg_badge}>{item.status}</span>
           </td>
@@ -3300,7 +3299,7 @@ class MMS_GD extends Component {
   renderTopic_B() {
     if (this.state.data_topic_B != null) {
       return this.state.data_topic_B.map((item) => (
-        <tr>
+        <tr key={item.id}>
           <td>
             <span className={item.bg_badge}>{item.alarm}</span>
           </td>
@@ -3312,7 +3311,7 @@ class MMS_GD extends Component {
   renderTopic_R() {
     if (this.state.data_topic_R != null) {
       return this.state.data_topic_R.map((item) => (
-        <tr>
+        <tr key={item.id}>
           <td>
             <span className={item.bg_badge}>{item.alarm}</span>
           </td>
@@ -3324,7 +3323,7 @@ class MMS_GD extends Component {
   renderTopic_H() {
     if (this.state.data_topic_H != null) {
       return this.state.data_topic_H.map((item) => (
-        <tr>
+        <tr key={item.id}>
           <td>
             <span className={item.bg_badge}>{item.alarm}</span>
           </td>
@@ -3349,7 +3348,6 @@ class MMS_GD extends Component {
       }
     );
     // console.log("get_yield_ct_B");
-    // console.log(data.data.result);
     if (data.data.result.length > 0) {
       await this.setState({
         yieldR_B: data.data.result[0].yield_rate,
@@ -3518,75 +3516,77 @@ class MMS_GD extends Component {
                   }}
                 >
                   <div className="col-md-2 col-3">
-                    <div className="small-box">
-                      <div className="inner  bg-primary">
-                        <h5>
+                  
+                    <div className="small-box" id="box_y">
+                      <div className="inner" style={{background: "rgba(129, 201, 250, 1)",borderRadius:"15px",border: "2px solid rgba(0, 118, 199, 0.2)"}}>
+                        <h6>
                           Yield Rate{" "}
                           <b id="flashing-text" style={{ float: "right" }}>
                             {this.state.selected_machine}B
                           </b>
-                        </h5>
-                        <h4>{this.state.yieldR_B} %</h4>
+                        </h6>
+                        <h5>{this.state.yieldR_B} %</h5>
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-1 col-3">
-                    <div className="small-box">
-                      <div className="inner bg-primary">
-                        <h5>Cycle Time</h5>
-                        <h4>{this.state.eachCT_B} sec</h4>
+                  <div className="col-md-2 col-3">
+                    <div className="small-box" id="box_y">
+                      <div className="inner" style={{ background: "rgba(129, 201, 250, 1)",borderRadius:"15px",border: "2px solid rgba(0, 118, 199, 0.2)"}}>
+                        <h6>Cycle Time</h6>
+                        <h5>{this.state.eachCT_B} sec</h5>
                       </div>
                     </div>
+                    
                   </div>
                   <div className="col-lg-1 col-3">
-                    <div className="small-box">
-                      <div className="inner bg-primary">
-                        <h5>Eff </h5>
-                        <h4>{this.state.eff_B} %</h4>
+                    <div className="small-box" id="box_y">
+                      <div className="inner" style={{background: "rgba(129, 201, 250, 1)",borderRadius:"15px",border: "2px solid rgba(0, 118, 199, 0.2)" }}>
+                        <h6>Eff </h6>
+                        <h5>{this.state.eff_B} %</h5>
                       </div>
                     </div>
                   </div>
 
                   <div className="col-lg-2 col-3">
-                    <div className="small-box">
-                      <div className="inner" style={{ background: "#22D51C" }}>
-                        <h5>
+                    <div className="small-box" id="box_y">
+                      <div className="inner" style={{ background: "rgba(129, 250, 131, 1)" ,borderRadius:"15px",border: "2px solid rgba(0, 175, 3, 0.2)" }}>
+                        <h6>
                           Cycle Time{" "}
                           <b id="flashing-text" style={{ float: "right" }}>
                             {this.state.selected_machine}R
                           </b>
-                        </h5>
-                        <h4>{this.state.eachCT_R} sec</h4>
+                        </h6>
+                        <h5>{this.state.eachCT_R} sec</h5>
                       </div>
                     </div>
                   </div>
 
                   <div className="col-lg-1 col-3">
-                    <div className="small-box">
-                      <div className="inner" style={{ background: "#22D51C" }}>
-                        <h5>Eff </h5>
-                        <h4>{this.state.eff_R} %</h4>
+                    <div className="small-box" id="box_y">
+                      <div className="inner" style={{ background: "rgba(129, 250, 131, 1)" ,borderRadius:"15px",border: "2px solid rgba(0, 175, 3, 0.2)" }}>
+                        <h6>Eff </h6>
+                        <h5>{this.state.eff_R} %</h5>
                       </div>
                     </div>
                   </div>
                   <div className="col-lg-2 col-3">
-                    <div className="small-box">
-                      <div className="inner" style={{ background: "#C835FF" }}>
-                        <h5>
+                    <div className="small-box" id="box_y">
+                      <div className="inner" style={{ background: "rgba(221, 158, 255, 1)",borderRadius:"15px",border: "2px solid rgba(136, 4, 207, 0.2)" }}>
+                        <h6>
                           Cycle Time{" "}
                           <b id="flashing-text" style={{ float: "right" }}>
                             {this.state.selected_machine}H
                           </b>
-                        </h5>
-                        <h4>{this.state.eachCT_H} sec</h4>
+                        </h6>
+                        <h5>{this.state.eachCT_H} sec</h5>
                       </div>
                     </div>
                   </div>
                   <div className="col-lg-1 col-3">
-                    <div className="small-box">
-                      <div className="inner" style={{ background: "#C835FF" }}>
-                        <h5>Eff </h5>
-                        <h4>{this.state.eff_H} %</h4>
+                    <div className="small-box" id="box_y">
+                      <div className="inner" style={{ background: "rgba(221, 158, 255, 1)",borderRadius:"15px",border: "2px solid rgba(136, 4, 207, 0.2)"}}>
+                        <h6>Eff </h6>
+                        <h5>{this.state.eff_H} %</h5>
                       </div>
                     </div>
                   </div>

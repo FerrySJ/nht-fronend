@@ -4,6 +4,7 @@ import { server } from "../../../constance/contance";
 import { httpClient } from "../../../utils/HttpClient";
 import ReactApexChart from "react-apexcharts";
 import * as moment from "moment";
+import Swal from "sweetalert2";
 import { FallingLines } from "react-loader-spinner";
 
 import "./grinding.css";
@@ -314,13 +315,13 @@ class MMS_GD_BY_MC extends Component {
             },
             yaxis: {
               show: true,
-              labels: {
-                // rotate: -45 ,
-                style: {
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                },
-              },
+              // labels: {
+              //   // rotate: -45 ,
+              //   style: {
+              //     fontSize: "24px",
+              //     fontWeight: "bold",
+              //   },
+              // },
             },
             legend: {
               show: true,
@@ -1585,18 +1586,18 @@ var H1_LOADING_ERROR = [],
             },
             yaxis: {
               show: true,
-              title: {
-                style: {
-                  fontSize: "20px",
-                },
-              },
-              labels: {
-                // rotate: -90,
-                style: {
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                },
-              },
+              // // title: {
+              // //   style: {
+              // //     fontSize: "20px",
+              // //   },
+              // // },
+              // labels: {
+              //   // rotate: -90,
+              //   style: {
+              //     fontSize: "24px",
+              //     fontWeight: "bold",
+              //   },
+              // },
             },
             legend: {
               show: true,
@@ -2069,8 +2070,6 @@ let data = await httpClient.post(
                             fontSize: "16px",
                           }}>
                           <thead>
-
-
                             <tr>
                               <th>STATUS</th>
                               <th>TIME (HH:mm:ss)</th>
@@ -2106,8 +2105,8 @@ let data = await httpClient.post(
                           fontWeight: "'bold'",
                         }}
                       >
-                        <i className="fas fa-exclamation-triangle"></i>Topic
-                        Non-operating :
+                        <i className="fas fa-exclamation-triangle"></i>TOPIC
+                        NON-OPERATING :
                         <b>{this.state.selected_machine}</b>
                       </h5>
                     </div>

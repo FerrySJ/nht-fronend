@@ -161,7 +161,9 @@ class Display_tb_mbr extends React.Component {
           <div className="container-fluid">
             <div className="row-12" style={{ paddingTop: "10px" }}>
               <div className="card">
-                <h5 className="card-header">Mornitoring All Machine <b>MBR</b></h5>
+                <h5 className="card-header">
+                  Mornitoring All Machine <b>MBR</b>
+                </h5>
 
                 {/* <h5 className="card-title" style={{ color: "red", textAlign: "end" }}><b>( Total: {this.state.countitem} M/C )</b></h5> */}
                 <div className="card-body">
@@ -194,7 +196,7 @@ class Display_tb_mbr extends React.Component {
                       <b>( Total: {this.state.countitem} M/C )</b>
                     </div>
                     <div className="col-auto">
-                      At time : {this.state.attime}
+                      Data as of : {this.state.attime}
                     </div>
                   </div>
                   <div className="row justify-content-center">
@@ -286,12 +288,12 @@ class Display_tb_mbr extends React.Component {
                             <th className="centered">M/C No</th>
                             <th className="centered">Model</th>
                             <th className="centered">
-                              Production <br/><b style={{ color: "#35FB00" }}>OK</b>{" "}
-                              total (pcs)
+                              Production <br />
+                              <b style={{ color: "#35FB00" }}>OK</b> total (pcs)
                             </th>
                             <th className="centered">
-                              Production <br/><b style={{ color: "red" }}>NG</b>{" "}
-                              total (pcs)
+                              Production <br />
+                              <b style={{ color: "red" }}>NG</b> total (pcs)
                             </th>
                             <th className="centered">Cycle time (sec)</th>
                             <th className="centered">Yield (%)</th>
@@ -304,11 +306,12 @@ class Display_tb_mbr extends React.Component {
                       </table>
                     </div>
                     <small>
-                    * Use <b>Production Total</b> for the calculation <b>Utillization</b>.<br/>
-                      * If <b>Production NG</b> more, then 1000 show message
-                      red, if <b>UTL</b> less, then 80 show message red, if{" "}
-                      <b>Yield</b> less, then 80 show message red and if{" "}
-                      <b>Cycle time</b> more, then 3.5 show message red.
+                      * Use <b>Production Total</b> for the calculation{" "}
+                      <b>Utillization</b>.<br />* If <b>Production NG</b> more,
+                      then 1000 show message red, if <b>UTL</b> less, then 80
+                      show message red, if <b>Yield</b> less, then 80 show
+                      message red and if <b>Cycle time</b> more, then 3.5 show
+                      message red.
                     </small>
                   </div>
                 </div>

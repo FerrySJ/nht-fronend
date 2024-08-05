@@ -18,12 +18,14 @@ class MMS_table_an extends React.Component {
       countitem: 0,
       loading: "on",
       start_date: moment().format("YYYY-MM-DD"),
+      // start_date: moment().startOf("month").format("YYYY-MM-DD"),
       yesterday: moment().subtract(1, "days").format("YYYY-MM-DD"),
       attime: "",
       prod_total: 0,
       prod_md: 0,
       prod_ma: 0,
       prod_ffl: 0,
+      a: "",
     };
   }
 
@@ -43,7 +45,9 @@ class MMS_table_an extends React.Component {
 
   //table production
   getOutput_table = async () => {
+    this.setState({ a: moment().format("HH:mm:ss") });
     try {
+      // console.log("1",moment().format("HH:mm:ss"));
       const array = await httpClient.post(
         server.MMS_AN_ALL_TB + "/" + this.state.start_date, // Find by date = Today
         { yesterday: this.state.yesterday }
@@ -53,7 +57,7 @@ class MMS_table_an extends React.Component {
       if (array.data.result[0].length > 0) {
         this.setState({
           data_table: array.data.result[0],
-  
+
           // prod_md: array.data.result_prod_total.MBRMD,
           // prod_ma: array.data.result_prod_total.MBRMA,
           prod_md:
@@ -73,27 +77,34 @@ class MMS_table_an extends React.Component {
           attime: array.data.result[0][0].at_time,
           loading: "off",
         });
-        setTimeout(
-          function () {
-            this.getOutput_table();
-          }.bind(this),
-          300000 //5 min
-          // 600000 //10 min
-        );
+        setTimeout(() => {
+          this.getOutput_table();
+        }, 300000);
+        // setTimeout(
+        //   function () {
+        //     this.getOutput_table();
+        //   }.bind(this),
+        //   300000 //5 min
+        //   // 600000 //10 min
+        // );
       } else {
-        setTimeout(
-          function () {
-            //Start the timer
-            this.setState({ loading: "off" });
-          }.bind(this),
-          5000 //5 sec
-          // 600000 //10 min
-        );
+        setTimeout(() => {
+          this.setState({ loading: "off" });
+        }, 5000); //5 sec
       }
+
+      // setTimeout(
+      //   function () {
+      //     //Start the timer
+      //     this.setState({ loading: "off" });
+      //   }.bind(this),
+      //   5000 //5 sec
+      //   // 600000 //10 min
+      // );
+      // }
     } catch (error) {
       console.log("get data error... ", error);
     }
-    
   };
 
   clear_state = () => {
@@ -166,7 +177,9 @@ class MMS_table_an extends React.Component {
           <div className="container-fluid">
             <div className="row-12" style={{ paddingTop: "10px" }}>
               <div className="card">
-                <h5 className="card-header">Mornitoring All Machine <b>Auto Noise</b></h5>
+                <h5 className="card-header">
+                  Mornitoring All Machine <b>Auto Noise</b>
+                </h5>
 
                 {/* <h5 className="card-title" style={{ color: "red", textAlign: "end" }}><b>( Total: {this.state.countitem} M/C )</b></h5> */}
                 <div className="card-body">
@@ -199,7 +212,7 @@ class MMS_table_an extends React.Component {
                       <b>( Total: {this.state.countitem} M/C )</b>
                     </div>
                     <div className="col-auto">
-                      At time : {this.state.attime}
+                    Data as of : {this.state.attime}
                     </div>
                   </div>
                   <div className="row justify-content-center">
@@ -291,32 +304,60 @@ class MMS_table_an extends React.Component {
                             <th className="centered">M/C No</th>
                             <th className="centered">Model</th>
                             <th className="centered">
-                              Production <br/><b style={{ color: "#35FB00" }}>OK</b>{" "}
-                              total (pcs)
+                              Production <br />
+                              <b style={{ color: "#35FB00" }}>OK</b> total (pcs)
                             </th>
                             <th className="centered">
-                              Production <br/><b style={{ color: "red" }}>NG</b>{" "}
-                              total (pcs)
+                              Production <br />
+                              <b style={{ color: "red" }}>NG</b> total (pcs)
                             </th>
-                            <th className="centered"><b style={{ color: "red" }}>AG</b><br/>(min)</th>
-                            <th className="centered"><b style={{ color: "red" }}>NG</b><br/>(min)</th>
-                            <th className="centered"><b style={{ color: "red" }}>MIX</b><br/>(min)</th>
-                            <th className="centered">Cycle time <br/>(sec)</th>
-                            <th className="centered">Yield <br/>(%)</th>
-                            <th className="centered">Utillization <br/>(%)</th>
-                            <th className="centered">Down time <br/>(min)</th>
-                            <th className="centered">Wait time <br/>(min)</th>
+                            <th className="centered">
+                              <b style={{ color: "red" }}>AG</b>
+                              <br />
+                              (min)
+                            </th>
+                            <th className="centered">
+                              <b style={{ color: "red" }}>NG</b>
+                              <br />
+                              (min)
+                            </th>
+                            <th className="centered">
+                              <b style={{ color: "red" }}>MIX</b>
+                              <br />
+                              (min)
+                            </th>
+                            <th className="centered">
+                              Cycle time <br />
+                              (sec)
+                            </th>
+                            <th className="centered">
+                              Yield <br />
+                              (%)
+                            </th>
+                            <th className="centered">
+                              Utillization <br />
+                              (%)
+                            </th>
+                            <th className="centered">
+                              Down time <br />
+                              (min)
+                            </th>
+                            <th className="centered">
+                              Wait time <br />
+                              (min)
+                            </th>
                           </tr>
                         </thead>
                         <tbody>{this.renderTable()}</tbody>
                       </table>
                     </div>
                     <small>
-                    * Use <b>Production Total</b> for the calculation <b>Utillization</b>.<br/>
-                      * If <b>Production NG</b> more, then 1000 show message
-                      red, if <b>UTL</b> less, then 80 show message red, if{" "}
-                      <b>Yield</b> less, then 80 show message red and if{" "}
-                      <b>Cycle time</b> more, then 3.5 show message red.
+                      * Use <b>Production Total</b> for the calculation{" "}
+                      <b>Utillization</b>.<br />* If <b>Production NG</b> more,
+                      then 1000 show message red, if <b>UTL</b> less, then 80
+                      show message red, if <b>Yield</b> less, then 80 show
+                      message red and if <b>Cycle time</b> more, then 3.5 show
+                      message red.
                     </small>
                   </div>
                 </div>

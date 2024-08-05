@@ -41,6 +41,7 @@ import Mms_alarm_b from "./components/mms_alarmlist/grinding/chart/mms_alarm_b.j
 import Mms_autonoise from "./components/mms_autonoise/mms_autonoise.js";
 import MMS_AN_PROD_TOTAL from "./components/mms_autonoise/mms_autonoise_prod_total.js";
 import MMS_table_an from "./components/mms_autonoise/mms_table_autonoise.js";
+import Status_mbr from "./components/status_mbr/status_mbr.js";
 
 
 // const express= require('express');
@@ -93,10 +94,11 @@ export default class App extends Component {
             <Route path="/test_BarChart" element={<BarChart />} />
             <Route path="/test_RangeBarChart" element={<RangeBarChart />} />
             <Route path="/chart_alarm_b" element={<Mms_alarm_b />} />
-            {/* Auto noise */}
             <Route path="/mms_an" element={<Mms_autonoise />} /> 
             <Route path="/mms_an_total" element={<MMS_AN_PROD_TOTAL />} /> 
             <Route path="/mms_an_table" element={<MMS_table_an />} /> 
+
+            <Route path="/status_mbr" element={<Status_mbr />} /> 
             
 
             

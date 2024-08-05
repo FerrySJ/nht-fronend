@@ -1,6 +1,4 @@
-// after check cmd : ssh -T git@github.com
-
-  import React, { Component } from "react";
+import React, { Component } from "react";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
@@ -22,7 +20,6 @@ const Mms_autonoise = () => {
   const [data_masterMC, set_masterMC] = useState([]);
   const [dataDT_series, setdataDT_series] = useState([]);
 
-  
   const getOutPut_PROD_AN = async () => {
     const array = await httpClient.post(
       server.realtime_chartPD_AN_URL +
@@ -33,54 +30,50 @@ const Mms_autonoise = () => {
         dataDate
     );
 
+    // console.log("ChartPD ==>", array.data);
     const listOutput_MBR_MD = array.data.resultOutput_MBR;
 
     if (listOutput_MBR_MD.length > 0) {
-      
-    setdataPD(listOutput_MBR_MD);
-    const categories = array.data.result[0].map((data) => data.at_time);
-    setChartData(categories)
+      setdataPD(listOutput_MBR_MD);
+      const categories = array.data.result[0].map((data) => data.at_time);
+      setChartData(categories);
 
-    const data_model = array.data.result[0][0];
-    const data_boxrealtime = array.data.result_box[0][0];
-    const data_ok = array.data.result_ok;
-    const max_prod = array.data.max_prod;
-    const avg_utl = array.data.result_AVG_utl[0][0]
-    let removed = data_ok.pop();
-    let finalObj = [];
-    let finalBox = [];
-    let finalAVG_utl = "";
-    finalObj = data_model;
-    finalBox = data_boxrealtime;
-    finalAVG_utl = avg_utl;
-    setDatasMaster(finalObj);
-    setDataOK(removed);
-    setDataBox(finalBox);
-    setdataAVG_utl(finalAVG_utl)
-    setDataMax(max_prod);
-    return array;
-  }else{
-    // console.log("0 0 0 0 0 ");
-    setdataPD([]);
-    setChartData([])
+      const data_model = array.data.result[0][0];
+      const data_boxrealtime = array.data.result_box[0][0];
+      const data_ok = array.data.result_ok;
+      const max_prod = array.data.max_prod;
+      const avg_utl = array.data.result_AVG_utl[0][0];
+      let removed = data_ok.pop();
+      let finalObj = [];
+      let finalBox = [];
+      let finalAVG_utl = "";
+      finalObj = data_model;
+      finalBox = data_boxrealtime;
+      finalAVG_utl = avg_utl;
+      setDatasMaster(finalObj);
+      setDataOK(removed);
+      setDataBox(finalBox);
+      setdataAVG_utl(finalAVG_utl);
+      setDataMax(max_prod);
+      return array;
+    } else {
+      // console.log("0 0 0 0 0 ");
+      setdataPD([]);
+      setChartData([]);
 
-    setDatasMaster([]);
-    setDataOK([]);
-    setDataBox([]);
-    setdataAVG_utl(0)
-    setDataMax([]);
-  }
-};
+      setDatasMaster([]);
+      setDataOK([]);
+      setDataBox([]);
+      setdataAVG_utl(0);
+      setDataMax([]);
+    }
+  };
   const getOutput_DT_AN = async () => {
     // console.log("========= DT =========");
     // console.log("dataMC chart DT : ", dataMC, dataDate);
     const array = await httpClient.get(
-      server.realtime_chartDT_AN_URL +
-        "/" +
-        dataMC +
-        "/" +
-        dataDate
-        // moment().format("YYYY-MM-DD")
+      server.realtime_chartDT_AN_URL + "/" + dataMC + "/" + dataDate
+      // moment().format("YYYY-MM-DD")
     );
 
     const listOutput_DT_MBR_MD = array.data.resultDT_AN;
@@ -117,14 +110,14 @@ const Mms_autonoise = () => {
     }, [HOUR_MS]);
 
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, [dataMC,dataDate]);
+  }, [dataMC, dataDate]);
 
   useEffect(() => {
     // getPosts();
     getOutPut_PROD_AN();
     getOutput_DT_AN();
     get_master_MC();
-  }, [dataMC,dataDate]);
+  }, [dataMC, dataDate]);
 
   ////////////////////////////////
   return (
@@ -294,7 +287,7 @@ const Mms_autonoise = () => {
               </h4>
               <div className="card-body">
                 {/* <h4>{((dataOK*(dataBox.cycle_time/100 )/ 3600) * 100).toFixed(2)} %</h4> */}
-                <h4>{((dataOK / dataBox.UTL_target) * 100).toFixed(2)} %</h4> 
+                <h4>{((dataOK / dataBox.UTL_target) * 100).toFixed(2)} %</h4>
                 {/* <h4>{((dataOK / dataAVG_utl.UTL_target) * 100).toFixed(2)} %</h4> ค่าจาก Qry ใหม่ รอ target_utl ตรงก่อน (2023-11-10)*/}
               </div>
             </div>
@@ -372,9 +365,9 @@ const Mms_autonoise = () => {
                       },
                       xaxis: {
                         labels: {
-                          rotate: -45
+                          rotate: -45,
                         },
-                        categories: ChartData
+                        categories: ChartData,
                         // [
                         //   "08:00",
                         //   "09:00",
@@ -518,7 +511,7 @@ const Mms_autonoise = () => {
                       chart: {
                         type: "pie",
                       },
-                      
+
                       legend: {
                         position: "bottom",
                       },

@@ -68,6 +68,13 @@ class Sidemenu extends Component {
                       {/* <i className="right fas fa-angle-left" /> */}
                     </a>
                   </li>
+                  <li className="nav-item">
+                    <a href="/status_mbr" className="nav-link" style={{ paddingLeft:"2.5rem" }}>
+                      <i className="far fa-square nav-icon" />
+                      
+                      <p>Status MBR</p>
+                    </a>
+                  </li>
                   
                   <li className="nav-item">
                     <a href="/mms_an" className="nav-link" style={{ paddingLeft:"2.5rem" }}>
