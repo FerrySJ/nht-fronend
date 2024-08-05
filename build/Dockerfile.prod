@@ -1,19 +1,4 @@
-FROM node:14 as build
-
-# Install openssh-client
-RUN apt-get update && apt-get install -y openssh-client
-
-# Create the SSH directory and add the GitHub SSH key
-RUN mkdir -p /root/.ssh && \
-    chmod 700 /root/.ssh && \
-    ssh-keyscan github.com >> /root/.ssh/known_hosts
-
-# Copy your SSH key into the container
-COPY id_rsa /root/.ssh/id_rsa
-RUN chmod 600 /root/.ssh/id_rsa
-
-# Increase Git buffer size
-RUN git config --global http.postBuffer 524288000
+FROM node:16 as build
 
 WORKDIR /app
 
