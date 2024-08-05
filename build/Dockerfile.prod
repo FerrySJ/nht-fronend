@@ -1,18 +1,24 @@
-# FROM node as build
-# WORKDIR /app
-# COPY package.json .
-# RUN npm install
-# COPY . .
-# RUN npm run build
-
-# FROM nginx
-# COPY --from=build /app/build /usr/share/nginx/html
-# 14
-
+# Dockerfile.prod
 FROM node:14 as build
+
+# Install openssh-client
+RUN apt-get update && apt-get install -y openssh-client
+
+# Create the SSH directory and add the GitHub SSH key
+RUN mkdir -p /root/.ssh && \
+    chmod 700 /root/.ssh && \
+    ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+# Copy your SSH key into the container
+# Make sure to not include your private key in your public repo
+COPY id_rsa /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+
 WORKDIR /app
+
 COPY package.json .
 RUN npm install
+
 COPY . .
 RUN npm run build
 
